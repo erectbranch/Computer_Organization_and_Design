@@ -18,6 +18,21 @@ Elsevier · 2017년 4월 13일 출시</b>
 
   > 컴퓨터 하드웨어, 소프트웨어 인터페이스를 자세히 공부한다.
 
+  > processor, memory/cache, I/O, multi-processors
+
+  > ISA(Instruction Set Architecture)
+
+  > GPU
+
+
+<br/>
+
+## 🚩 정리한 문서 목록
+
+### 📔 컴퓨터 기초
+
+ - [Computer Abstractions and Technology](https://github.com/erectbranch/Computer_Organization_and_Design/tree/master/ch01)
+
 <br/>
 
 ## :mag: 목차
