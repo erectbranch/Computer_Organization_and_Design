@@ -33,6 +33,10 @@ Elsevier · 2017년 4월 13일 출시</b>
 
  - [Computer Abstractions and Technology](https://github.com/erectbranch/Computer_Organization_and_Design/tree/master/ch01)
 
+ - [RISC-V Instructions(RV64I)](https://github.com/erectbranch/Computer_Organization_and_Design/tree/master/ch02)
+
+   > CISC vs RISC, general purpose register, register operand, data alignment
+
 <br/>
 
 ## :mag: 목차
