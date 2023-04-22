@@ -78,11 +78,11 @@ int a;      // type: integer
 참고로 variable에 간단한 정수를 담았다면 다음과 같이 초기화가 된다.
 
 ```assembly
-// register x5가 해당 변수를 저장한다고 가정
-// 0으로 초기화
+# register x5가 해당 변수를 저장한다고 가정
+# 0으로 초기화
 add x5 x0 x0
 
-// 7로 초기화
+# 7로 초기화
 addi x5 x0 7
 ```
 
@@ -136,6 +136,8 @@ addi x5 x0 7
 
 - x12-x17: function arguments
 
+32개의 general purpose register는 **register file**이라는 구조 속에 들어간다.
+
 ---
 
 ## 2.4 Register Operands
@@ -155,9 +157,9 @@ C compiler가 variable을 다음과 같이 할당했다고 하자.
 위 할당에 따라 C code를 RISC-V instruction(오직 arithmetic instruction)으로 바꾸면 다음과 같다.
 
 ```assembly
-add x5 x20 x21    // g + h
-add x6 x22 x23    // i + j
-sub x19 x5 x6     // f = (g + h) - (i + j)
+add x5 x20 x21    # g + h
+add x6 x22 x23    # i + j
+sub x19 x5 x6     # f = (g + h) - (i + j)
 ```
 
 그런데 위 예제처럼 RISC-V instruction을 수행하기 위해서는, memory에서 variables의 값을 읽어서 temporaries에 담는 과정이 필요할 것이다. 이 과정은 **load instruction**가 수행한다.
@@ -199,12 +201,12 @@ load instruction을 살펴보기 전에, RISC-V에서 data를 memory에 어떻�
 - Big-Endian: MSB is at the least address
 
 ```assembly
-// MSB    LSB
+#  MSB    LSB
 
-// Little-Endian
+#  Little-Endian
    0x44332211
 
-// Big-Endian
+#  Big-Endian
    0x11223344
 ```
 
@@ -214,7 +216,7 @@ load instruction을 살펴보기 전에, RISC-V에서 data를 memory에 어떻�
 
 다음은 load instruction의 예시다.
 
-```
+```assembly
 ld x9, 8(x22)
 ```
 
@@ -257,8 +259,8 @@ g = h + A[8];
 RISC-V code로 compile하면 다음과 같은 instruction이 된다.
 
 ```assembly
-ld x5 64(x22)       // base address + offset 64에 있는 data(A[8])를 x5에 load 
-add x23, x21, x5    // h + A[8]를 x23에 저장
+ld x5 64(x22)       # base address + offset 64에 있는 data(A[8])를 x5에 load 
+add x23, x21, x5    # h + A[8]를 x23에 저장
 ```
 
 위 예제에서 A 배열은 8byte인 long type이기 때문에, doubleword를 load하는 ld를 사용했다. A[8]이므로 offset은 8*8.
@@ -267,7 +269,7 @@ add x23, x21, x5    // h + A[8]를 x23에 저장
 
 > 만약 이보다도 더 짧은 2byte의 short type로 선언했다면, `short A[8]`을 load하려면 다음과 같은 instruction이 사용되었을 것이다. offset은 8*2
 
-```
+```assembly
 lh x5 16(x22)
 ```
 
@@ -289,7 +291,7 @@ A[12] = h + A[8];
 
 RISC-V code로 compile한 결과는 다음과 같다.
 
-```
+```assembly
 ld    x5, 64(x22)    # reg x5 gets A[8]
 add   x5, x21, x5    # reg x5 gets h+A[8]
 sd    x5, 96(x22)    # Stores h+A[8] to A[12]
@@ -339,7 +341,7 @@ register는 값을 load할 때 register width인 8byte(64bit)만큼을 채워야
 
 load instruction을 사용하지 않고 operand 자리에 constant를 넣는 instruction이 존재한다.
 
-```
+```assembly
 addi x22, x22, 4    # x22 = x22 + 4
 ```
 
