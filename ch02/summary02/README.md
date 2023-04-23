@@ -23,7 +23,7 @@ else f = g - h;
 
 위 C code를 RISC-V instruction으로 compile하면 다음과 같다.
 
-- i==j를 `beq`로 처리하지 않고 `neq`(not equal, i $\neq$ j)로 check하고 있는 점에 유의하자. 
+- i==j를 `beq`로 처리하지 않고 `bne`(not equal, i $\neq$ j)로 check하고 있는 점에 유의하자. 
 
 ```assembly
       bne x22, x23, Else     // x22, x23이 같지 않다면 Else(label)로 jump
