@@ -42,9 +42,13 @@ Elsevier · 2017년 4월 13일 출시</b>
 
  - [Conditional Operation, Branch](https://github.com/erectbranch/Computer_Organization_and_Design/tree/master/ch02/summary02)
 
-   > branch instructions(if-else, while example), procedure calling, procedure call instructions, memory layout, stak, leaf procedure, non-leaf procedure(factorial example), string copy example
+   > branch instructions(if-else, while example), procedure calling, procedure call instructions, memory layout, stack, leaf procedure, non-leaf procedure(factorial example), string copy example
 
  - [wide, branch instructions, data race](https://github.com/erectbranch/Computer_Organization_and_Design/tree/master/ch02/summary03)
+
+   > wide immediate operands, branch addressing, SB-format, branching far away
+
+   > data race, synchronization, atomic swap, mutex lock
 
  - [RISC-V Processor](https://github.com/erectbranch/Computer_Organization_and_Design/tree/master/ch04)
 
