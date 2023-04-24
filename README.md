@@ -26,7 +26,9 @@ Elsevier · 2017년 4월 13일 출시</b>
 
  - [Computer Abstractions and Technology](https://github.com/erectbranch/Computer_Organization_and_Design/tree/master/ch01)
 
-   > response time(execution time): wall clock time(elapsed time), CPU time, clock rate, clock period, CPI(Clock cycles Per Instruction)
+   > response time(execution time): wall clock time(elapsed time), CPU time, clock rate, clock period, CPI(Clock cycles Per Instruction), Effective CPI, MIPS
+
+   > Power Wall, multicore processor, parallel programming, Amdahl's Law
 
 ### ⚙️ RISC-V
 

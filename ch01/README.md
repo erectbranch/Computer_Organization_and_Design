@@ -96,7 +96,7 @@
 
 그런데 execution time은 여러 방법으로 측정할 수 있다. 
 
-- **wall clock time**(벽시계 시간) = **elaspsed time**(경과 시간)
+- **wall clock time**(벽시계 시간) = **elapsed time**(경과 시간)
 
     한 task를 끝내는 데 필요한 전체 시간. disk/memory access, I/O, OS overhead 등을 모두 포함한다.
 
@@ -138,21 +138,30 @@ CPU execution time = CPU clock cycles / clock rate
 
 ### <span style='background-color: #393E46; color: #F7F7F7'>&nbsp;&nbsp;&nbsp;📝 예제 1: 성능 개선&nbsp;&nbsp;&nbsp;</span>
 
-두 개의 컴퓨터 A, B가 있다. 두 컴퓨터는 같은 프로그램을 실행할 것이다.
+두 개의 컴퓨터 A, B가 있다. 두 컴퓨터는 같은 program을 실행한다.
 
-- A: 2GHz clock을 갖고, program 실행에 10s가 걸린다.
+- A: 2GHz clock rate를 가지며, program 실행에 10초가 걸린다.
 
-- B: ? clock을 갖는다.
+- B: $x$ clock rate를 가지며, program 실행에 6초가 걸리도록 만들 것이다.
 
-현재 B clock cycle을 A의 1.2배로 고치면 6s의 시간으로 수행할 수 있다고 한다. 그렇다면 원래 B의 clock은 몇 GHz였을까?
+이를 위해 B의 clock cycle이 A의 1.2배가 필요하다면, B의 clock rate $x$ 는 얼마로 둬야 하는가?
 
 ### <span style='background-color: #C2B2B2; color: #F7F7F7'>&nbsp;&nbsp;&nbsp;🔍 풀이&nbsp;&nbsp;&nbsp;</span>
 
-A를 바탕으로 program을 수행하는 데 필요한 clock cycle 수를 계산할 수 있다.
+먼저 A를 바탕으로 program을 실행하는 데 필요한 CPU clock cycles을 구하자.(#CPU clock cycles for a program)
 
-10s \* 2 \* 10^9 Hz = 20 \* 10^9 clock cycles
+- \# program이 갖는 instructions $\times$ instruction당 average clock cycles
 
-6s \* 1.2 \* (B clock rate) = 20 \* 10^9 이므로, B clock rate = 4GHz라는 결과를 얻을 수 있다.
+$$10 \times 2 \times 10^{9}$$
+
+즉, program을 위해서 $20 \times 10^{9}$ cycles가 필요하다.
+
+이제 6초동안 $20 \times 10^{9}$ cycles를 수행할 수 있는 B의 clock rate를 구하면 된다.
+
+$$ 6 \times 1.2 \times (B \,\, clock \,\, rate) = 20 \times 10^{9} $$
+
+즉, B clock rate는 $4 \times 10^{9}$ = 4GHz이다.
+
 
 ---
 
@@ -164,7 +173,11 @@ execution time은 instruction 수와 크게 관련이 있다.
 CPU clock cycles = instruction 수 * CPI
 ```
 
-**CPI**(Clock cycles Per Instruction)은 instruction 하나에 필요한 clock cycle의 수를 의미한다. instruction마다 실행 시간이 다르기 때문에, 모든 instruction의 평균 값으로 산출한다.
+- **CPI**(Clock cycles Per Instruction): instruction 하나에 필요한 clock cycle 수를 의미한다. 
+
+   - instruction마다 실행 시간이 다르기 때문에, 모든 instruction의 평균 값으로 산출한다.
+
+> cycle을 시간의 개념으로 바라보는 시각을 갖는 것이 중요하다. 필요한 cycle이 많을수록 오랜 시간이 걸린다.
 
 ---
 
@@ -188,9 +201,9 @@ ISA가 같으므로 두 컴퓨터가 실행해야 하는 instruction의 총 개�
 
 execution time은 clock cycle 수 * clock cycle time이므로, 다음과 같이 계산할 수 있다.
 
-- A: instruction 수 \* 2.0 \* 250ps 
+- A: instruction 수 \* 2.0 \* 250ps (= 500)
 
-- B: instruction 수 \* 1.2 \* 500ps
+- B: instruction 수 \* 1.2 \* 500ps (= 600)
 
 따라서 A가 B보다 1.2배 더 빠르다. 
 
@@ -198,7 +211,13 @@ execution time은 clock cycle 수 * clock cycle time이므로, 다음과 같이 
 
 ### <span style='background-color: #393E46; color: #F7F7F7'>&nbsp;&nbsp;&nbsp;📝 예제 3: CPI 비교&nbsp;&nbsp;&nbsp;</span>
 
-어떤 엔지니어는 compiler 설계를 위해 두 가지 방법(1, 2) 중 하나를 선택하려고 한다.
+어떤 엔지니어는 compiler 설계를 위해 두 가지 방법(1, 2) 중 하나를 선택할 것이다. 두 코드의 차이를 비교하라.
+
+1. 어떤 코드가 더 많은 instruction을 실행하는가 
+
+2. 어떤 코드가 더 빠른가 
+
+3. 각 코드의 CPI는 얼마인가
 
 | | | 실행에 필요한 instruction 개수 | |
 | :---: | :---: | :---: | :---: | 
@@ -210,34 +229,298 @@ execution time은 clock cycle 수 * clock cycle time이므로, 다음과 같이 
 
 > CPI가 클수록 더 complex한 instruction이다.
 
-두 코드의 차이를 비교하라. (1) 어떤 코드가 더 많은 instruction을 실행하는가 (2) 어떤 코드가 더 빠른가 (3) 각 코드의 CPI는 얼마인가
+### <span style='background-color: #C2B2B2; color: #F7F7F7'>&nbsp;&nbsp;&nbsp;🔍 풀이&nbsp;&nbsp;&nbsp;</span>
+
+1. instruction 총 개수는 각 A, B, C instruction 개수를 더하면 된다.
+
+    - 코드 1: 2 + 1 + 2 = 5
+
+    - 코드 2: 4 + 1 + 1 = 6
+
+    따라서 절대적인 instruction 개수를 따지면 코드 1이 더 적다.
+
+2. 어떤 코드가 더 빠른가
+
+    먼저 instruction마다 필요한 cycle을 도출해 보자.
+
+    - 코드 1: 2 \* 1 + 1 \* 2 + 2 \* 3 = 10
+
+    - 코드 2: 4 \* 1 + 1 \* 2 + 1 \* 3 = 9
+
+    코드 1이 더 사이클이 많으므로 execution time도 더 소요될 것이다. 따라서 코드 2가 instruction 수는 더 많아도 execution time 자체는 더 짧다.
+
+3. 각 코드의 CPI는 얼마인가
+
+    각 코드에 instruction 개수를 나눠서 평균을 구하면 된다.
+
+    - 코드 1: 10 / 5 = 2.0
+
+    - 코드 2: 9 / 6 = 1.5
+
+---
+
+### 1.5.4 Effective CPI
+
+서로 다른 computer는 ISA가 다를 것이기 때문에, 실행 시간(CPU time)을 측정해서 비교하는 방법을 사용할 수 있다. 이때 사용하는 지표가 **effective CPI**(average CPI)이다.
+
+```math
+{\sum}_{i=1}^{n}{{CPI}_{i} \times IP_{i}}
+```
+
+- ${CPI}_{i}$ : instruction $i$ 실행에 소요되는 평균 clock cycle
+
+- $IP_{i}$ : instruction $i$ 가 실행되는 percentage(비율)
+
+예를 들어, instruction A가 20%의 비율로 실행되며 CPI가 2이고, 명령어 B가 80%의 비율로 실행되며 CPI가 4라면, "Effective CPI"는 다음과 같다..
+
+$$ {0.2 \times 2 + 0.8 \times 4} = 3.6 $$
+
+즉, 이 program의 Effective CPI는 3.6 cycle이다. 실행 시간을 의미하는 지표인 만큼 적을수록 빠르게 수행되는 program이다.
+
+---
+
+### <span style='background-color: #393E46; color: #F7F7F7'>&nbsp;&nbsp;&nbsp;📝 예제 4: 종류별 instruction 비교&nbsp;&nbsp;&nbsp;</span>
+
+다음과 같은 instruction이 있다. 실행 빈도(Freq)와 CPI는 다음과 같다.
+
+> clock freq가 아니라, instruction이 실행되는 percentage(비율)을 나타내는 freq이다.
+
+| Op | Freq | ${\mathrm{CPI}}_{i}$ | Freq $\times {\mathrm{CPI}}_{i}$ | 
+| --- | --- | --- | --- |
+| ALU | 50% | 1 | |
+| Load | 20% | 5 | |
+| Store | 10% | 3 | |
+| Branch | 20% | 2 | |
+
+1. 더 나은 data cache가 average load time을 2 cycles로 줄인다면, machine은 얼마나 더 빨라지는가?
+
+2. branch prediction을 사용하여 branch time을 한 cycle 절약하는 것과 비교하면 어떤 차이가 있는가?
+
+3. 두 개의 ALU instruction을 동시에 실행할 수 있다면 어떠한 차이가 발생하는가?
 
 ### <span style='background-color: #C2B2B2; color: #F7F7F7'>&nbsp;&nbsp;&nbsp;🔍 풀이&nbsp;&nbsp;&nbsp;</span>
 
-(1) instruction 총 개수는 각 A, B, C instruction 개수를 더하면 된다.
+1. 더 나은 data cache가 average load time을 2 cycles로 줄인다면, machine은 얼마나 더 빨라지는가?
 
-- 코드 1: 2 + 1 + 2 = 5
+    - 위 도표에서 기존 Load는 5 cycles가 소요된다.
 
-- 코드 2: 4 + 1 + 1 = 6
+    Effective CPI를 계산하면 다음과 같다.
 
-따라서 절대적인 instruction 개수는 코드 1이 더 적다.
+    - 기존 Effective CPI vs data cache 개선 Effective CPI
 
-(2) 어떤 코드가 더 빠른가
+$$ (0.5 \times 1 + 0.2 \times 5 + 0.1 \times 3 + 0.2 \times 2) = 2.2 $$
 
-먼저 instruction마다 필요한 cycle을 도출해 보자.
+$$ (0.5 \times 1 + 0.2 \times 2 + 0.1 \times 3 + 0.2 \times 2) = 1.6 $$
 
-- 코드 1: 2 \* 1 + 1 \* 2 + 2 \* 3 = 10
 
-- 코드 2: 4 \* 1 + 1 \* 2 + 1 \* 3 = 9
+2. branch prediction을 사용하여 branch time을 한 cycle 절약하는 것과 비교하면 어떤 차이가 있는가?
 
-코드 1이 더 사이클이 많으므로 execution time도 더 소요될 것이다. 따라서 코드 2가 instruction 수는 더 많아도 execution time 자체는 더 짧다.
+    아래 계산에 따라 기존 Effective CPI보다 0.2 cycle 빨라지는 것을 알 수 있다.
 
-(3) 각 코드의 CPI는 얼마인가
+$$ (0.2 \times -1) = -0.2 $$
 
-각 코드에 instruction 개수를 나눠서 평균을 구하면 된다.
 
-- 코드 1: 10 / 5 = 2.0
+3. 두 개의 ALU instruction을 동시에 실행할 수 있다면 어떠한 차이가 발생하는가?
 
-- 코드 2: 9 / 6 = 1.5
+    기존 $CPI_{i}$ 에 1/2를 해준 값으로 계산하면 된다. 아래 계산에 따라 0.25 cycle이 더 빨라지는 것을 알 수 있다.
+
+$$-0.5 x 0.5 = -0.25$$
+
+---
+
+### 1.5.4 Benchmarks
+
+processor A는 딥러닝 처리에 능하고, processor B는 다른 처리에 능하다면 어떻게 두 processor를 비교할 수 있을까? 대표적으로 **SPEC**(System Performance Evalutation Cooperative) benchmark와 같이 다양한 performance를 측정 및 비교할 수 있는 표준화된 benchmark를 이용하면 된다.
+
+- integer benchmarks
+
+- floating-point benchmarks
+
+> Power workload, Java workload, Embedded application(EEMBC), Multithreaded programming(PARSEC), FPU benchmark 등
+
+---
+
+### 1.5.5 MIPS
+
+performance matric으로 종종 **MIPS**(Millions of Instructions Per Second)라는 단위를 사용한다. 단, 아래와 같은 사항을 주의해서 사용해야 한다.
+
+- 다른 computer끼리는 ISA가 다르다.
+
+- 다른 instruction끼리는 complexity가 다르다.
+
+```
+MIPS = #instructions / execution time * 10^6
+     // 이때 execution time = (#instructions * CPI)/clock rate이므로
+     = (clock rate) / CPI * 10^6
+```
+
+---
+
+## 1.6 Power Wall
+
+![power trend](images/power_trend.png)
+
+> 검은 색 선은 Power(전력), 파란 색 선은 Clock Rate(frequency, 클럭 속도)를 의미한다.
+
+> 사실 컴퓨터에서 power(전력)보다 더 중요한 지표는 energy이다. energy 척도인 J(joule)을 단위시간당 energy에 해당되는 W(Watt = joule/sec)보다 더 자주 사용한다.
+
+위 그림을 보면 30년간 frequency와 power가 함께 빠르게 증가하다가 어느 순간 주춤해진 것을 확인할 수 있다. frequency와 power가 동시에 증가한 이유는 이 둘이 서로 연관이 있기 때문이다.
+
+이는 integrated circuit을 구성하는 소자의 특성을 생각하면 알 수 있다. 주된 기술인 CMOS(Complementary Metal Oxide Semiconductor)는 다음과 같은 특성을 지닌다.
+
+- CMOS의 주 energy 소비는 0 to 1 혹은 1 to 0으로 switching(dynamic energy)되는 사이에 이루어진다.
+
+$$ energy \, \propto \, C \times V^{2}$$
+
+- $C$ : capacitive load
+
+- $V$ : voltage
+
+> 위 식은 $0 \rightarrow 1 \rightarrow 0$ 이나 $1 \rightarrow 0 \rightarrow 1$ 처럼 logic이 두 번 바뀔 때 소모하는 energy로, 한 번 바뀔 때는 ${1 \over 2}$ 를 곱해야 한다.
+
+transistor 하나가 소비하는 power는, (한 번 바뀔 때 소모되는 energy) $\times$ (시간당 logic이 바뀌는 frequency)다.
+
+$$ power \, \propto \, {1 \over 2} \times C \times V^{2} \times Frequency \, switched $$
+
+그런데 앞서 frequency가 계속해서 증가해서 1,000배 더 빨라진 것에 비해 power는 고작 30배 증가한 것을 확인할 수 있었다. 
+
+- 새 공정기술의 등장으로 voltage는 줄어들었고, voltage는 power의 제곱으로 비례하기 때문에 초기에는 power가 낮아질 수 있었다.
+
+- 하지만 voltage를 낮추면 낮출수록 transistor의 누설(leak) 전류가 생기게 되었고, 현재는 이 누설 전류가 너무 많아지게 되는 문제에 직면했다.
+
+  - 예를 들어 server chip에서는 이미 power의 40%가 누설에 의해 소모되고 있다. 
+
+  > 꽉 잠기지 않는 수도꼭지에 비유할 수 있다.
+  
+이 문제를 **Power Wall**(전력 장벽)이라 한다.
+
+---
+
+### 1.6.1 Vdd scaling
+
+![Vth, Vdd gap](images/Vdd_Vth.png)
+
+> Vdd는 굉장히 늘어났는데, Vth는 조금씩 늘어난 추세를 보인다.
+
+Vth와 Vdd의 차이를 비교하면 더 확실하게 이해할 수 있다.
+
+- high, low 사이의 small margin만 존재
+
+  > 잠깐의 glitch로 low(0)이 갑자기 high(1)이 되는 일이 발생하면 안 된다.
+
+- high variability or large leakage power
+
+하지만 Vdd를 줄이면 Frequency가 줄어들게 된다. 이러한 문제를 해결할 대안으로 multiprocessor(multicore)가 등장한다.
+
+---
+
+## 1.7 multicore processor
+
+같은 CPI를 갖는 N개의 core라면, 오직 1/N frequency로 동작할 수 있다. 다시 말해 low voltage(power)로 performance를 유지할 수 있는 것이다.
+
+> 1core가 2GHz frequency로 동작했다면, 2core에서는 core 하나당 f/2인 1GHz로 동작하게 된다. 사실 core 하나만 놓고 비교하면, 낮은 frequency를 갖게 되서 latency가 늘어나게 되지만, core의 수가 많아져서 parallelism에 의해 전체적인 throughput은 더 향상되는 것이다.
+
+> 하지만 그만큼 transistor 소자가 더 필요하게 된다.
+
+![1-core vs 2-core](images/1-core_vs_2-core_processor.png)
+
+> multiplexer가 각 core의 output을 모아서 처리한다.
+
+multicore에서는 아래와 같은 코드를 거의 simultanaous하게 함께 처리할 수 있다.
+
+```c
+for (i = 0; i < 100; i++) {
+    C[i] = A[i] + B[i];
+}
+```
+
+하지만 다음과 같이 **dependency**가 있다면 이야기는 달라진다.
+
+```c
+// loop-carried dependence
+for (i = 0; i < 100; i++) {
+    C[i] = A[i] + B[i];
+}
+```
+
+위 코드는 아래와 같이 간단히 나눌 수 없다.
+
+- 1 core: 0 ~ 49까지의 index 처리
+
+- 2 core: 50 ~ 99까지의 index 처리
+
+왜냐하면 index 50은 dependency에 의해 index 49가 처리된 이후부터 처리할 수 있기 때문이다. 이러한 문제에서 짐작할 수 있듯이, multicore는 여러 core가 busy하게 유지하는 것이 핵심이다.
+
+다음은 4 core를 나타낸 그림이다. 약 2배의 performance 향상을 얻을 수 있다.
+
+![1-core vs 4-core](images/1-core_vs_4-core_processor.png)
+
+하지만 여전히 문제는 남아 있다.
+
+- 각 processor의 voltage를 40%까지 줄였지만, 엄밀히 따져서 voltage 총량은 여전히 많이 소모한다.
+
+- dependence는 accelerate하기가 힘들다.
+
+  > 사실 heterogeneous device가 계속해서 나오는 이유이기도 하다.(specific purpose를 수행하기 위한 device)
+
+> 어떻게 같은 processor를 voltage를 조절해 가면서 사용할 수 있을까? 바로 **DVFS**(Dynamic Voltage Frequency Scaling)라는 기술의 덕택이다. power consumption을 줄이기 위해, processor가 workload에 따라서 voltage와 frequency를 조절하는 기술이다.
+
+> game이나 browser 용도에서는 processor를 활발하게 사용하다가, 간단한 texting이나 application에서는 덜 사용하는 것과 같다.
+
+---
+
+## 1.8 parallel programming
+
+따라서 multicore가 busy할 수 있는 explicit한 parallel programming이 필요하다.
+
+- **ILP**(Instruction Level Parallelism)
+
+  - hardware가 한번에 multiple instruction을 실행한다.
+
+  - programmer에게는 보이지 않는다.(hidden)
+
+하지만 다음과 같은 문제 때문에 구현이 힘들다.
+
+- programming 난이도
+
+- load balancing
+
+  > "N core가 1/N frequency에 동일한 performance를 갖는다"는 전제는, 모든 N core가 idle하지 않고, 똑같은 수의 instruction을 실행할 수 있다는 가정을 기반으로 한다.
+
+- optimizing communication and synchronization: 매우 느린 어떤 core에 의해, 결과를 취합하는 동안 overhead가 발생할 수 있다.
+
+---
+
+## 1.9 Amdahl's Law
+
+**Amdahl's Law**(암달의 법칙)은 다음과 같다. 아무리 많이 processor의 core를 늘린다고 해도, performance를 늘릴 수 있는 한도가 존재한다.
+
+```
+(improved) Execution time = (Execution time affected by improvement) / (Amount of improvement) + Execution time unaffected
+```
+
+혹은 다음 수식으로 표현할 수 있다.
+
+$$ {{1} \over {(1-P)+{{P}\over{S}}}} $$
+
+- P: optimized part의 비율
+
+- S: optimized part의 speedup
+
+### <span style='background-color: #393E46; color: #F7F7F7'>&nbsp;&nbsp;&nbsp;📝 예제 5: Amdahl's law&nbsp;&nbsp;&nbsp;</span>
+
+한 program이 computer에서 수행되는 데 100초가 걸린다. 이중에서 multiply operation(곱하기 연산)은 100초 중 80초를 소모한다.
+
+만약 이 program에서 5배 speedup을 얻으려면, 얼마나 multiply operation의 속도를 높여야 하는가?
+
+### <span style='background-color: #C2B2B2; color: #F7F7F7'>&nbsp;&nbsp;&nbsp;🔍 풀이&nbsp;&nbsp;&nbsp;</span>
+
+- multiply operation은 수행 시간에서 80%를 차지한다.(P=0.8)
+
+- 전체 speedup은 5이다.
+
+$$ {{1} \over {(1 - 0.8) + {{0.8} \over S}}} = 5 $$
+
+문제를 풀면 얻을 수 없는 speedup 수치임을 알 수 있다.
 
 ---
