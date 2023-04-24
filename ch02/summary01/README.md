@@ -1,5 +1,7 @@
 # 2 Instructions
 
+> [How exactly does the RISC-V immediate encoding notation work?](https://copyprogramming.com/howto/how-exactly-does-the-risc-v-immediate-encoding-notation-work)
+
 이번 장에서는 instruction을 어떻게 represent하는지를 학습한다. 들어가기 앞서 몇 가지 RISC-V("리스크 파이브"로 발음)의 특징을 살펴보자.
 
 - RISC-V의 **arithmetic instruction**(산술 연산자)들은 언제나 3개의 variables을 사용한다. (설계 원칙 1: 간단하게 설계하기 위해서는 규칙적인 것이 좋다.)
@@ -20,7 +22,9 @@
 
 현재 문서에서는 <U>64bit register width를 갖는 RV64I</U>를 살펴본다. 기본적으로 RV32I와 공통으로 instruction(35개)을 공유하지만 몇 가지 RV64I만의 추가 instruction(12개)을 갖고 있다.
 
-> 32bit instruction과 64bit instruction을 모두 처리할 수 있다. 하지만 기본적으로 32bit instruction을 사용한다.
+> 16bit, 32bit, 48bit, 64bit 등 다양한 크기의 instruction을 모두 처리할 수 있지만, 기본적으로 32bit instruction을 사용한다. 차이점은 sign extension 유무로 bit수가 register width에 알맞게 확장된다는 점이다.
+
+> 본래 RV32I에서 32bit register width에 맞게 word를 load하는 instruction인 `lw`는, RV64I에서 여전히 32 bit word를 load하지만 register를 채우기 위해 sign extend(부호 확장)이 이루어진다. 
 
 ---
 
@@ -191,6 +195,8 @@ load instruction을 살펴보기 전에, RISC-V에서 data를 memory에 어떻�
     ![word-aligned](images/RV64I_memory.png)
 
     또한 MIPS와 ARM은 반드시 word의 address가 4(8)의 배수(aligned)이어야 하지만, RISC-V는 이를 강제하지 않는다.(unaligned도 OK)
+
+여기서 또 중요하게 봐야할 점은 memory는 bit 단위가 아닌 **byte addressing**을 사용하는 부분이다. memory에는 오직 byte 단위로만 접근할 수 있으며, 이 때문에 doubleword는 8의 배수 address를 갖게 된다.
 
 참고로 Endian의 뜻은 다음과 같다. 아래과 같은 bit가 있다고 하면 **endianness**(엔디안)에 따라 register에 저장된 bit들이 memory에 저장되는 순서가 달라진다.
 
