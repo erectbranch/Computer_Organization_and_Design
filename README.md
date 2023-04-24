@@ -22,15 +22,17 @@ Elsevier · 2017년 4월 13일 출시</b>
 
 ## 🚩 정리한 문서 목록
 
-### 📔 컴퓨터 기초
+### 📔 Computer Abstractions
 
  - [Computer Abstractions and Technology](https://github.com/erectbranch/Computer_Organization_and_Design/tree/master/ch01)
 
    > response time(execution time): wall clock time(elapsed time), CPU time, clock rate, clock period, CPI(Clock cycles Per Instruction)
 
+### ⚙️ RISC-V
+
  - [RISC-V Instructions(RV64I)](https://github.com/erectbranch/Computer_Organization_and_Design/tree/master/ch02/summary01)
 
-   > CISC vs RISC, general purpose register(register file), register operands, data alignment(MIPS vs RISC-V), little/big Endian, register spilling, bit extension
+   > CISC vs RISC, general purpose register(register file), register operands, data alignment(MIPS vs RISC-V), byte addressing, little/big Endian, register spilling, bit extension
 
    > R-format instructions(arithmetic), I-format instructions(load, immediate arithmetic), S-format instructions(stores)
 
@@ -39,6 +41,10 @@ Elsevier · 2017년 4월 13일 출시</b>
  - [Conditional Operation, Branch](https://github.com/erectbranch/Computer_Organization_and_Design/tree/master/ch02/summary02)
 
    > branch instructions(if-else, while example), procedure calling, procedure call instructions, memory layout, stak, leaf procedure, non-leaf procedure(factorial example), string copy example
+
+ - [wide, branch instructions, data race](https://github.com/erectbranch/Computer_Organization_and_Design/tree/master/ch02/summary03)
+
+ - [RISC-V Processor](https://github.com/erectbranch/Computer_Organization_and_Design/tree/master/ch04)
 
 <br/>
 
