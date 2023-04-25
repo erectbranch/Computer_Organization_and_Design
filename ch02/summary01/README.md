@@ -439,9 +439,13 @@ instruction에서 oprand의 address를 나타낼 수 있는 방법은 다양하�
 
 ![RISC-V addressing mode](images/RISC_V_addressing_modes.png)
 
-- Immediate addressing
+- Immediate addressing: immediate가 실제 constant로 사용된다.
 
-- Register addressing: operand가 저장된 register를 가리킨다.
+  - memory에서 data를 fetching하는 과정이 필요 없다.
+
+- Register addressing: operand가 register에 저장되어 있고, operand는 register index를 가리킨다.
+
+  - memory에서 data를 fetching하는 과정이 필요 없다.
 
 - Base addressing: operand를 가리키는 pointer가 저장된 register를 가리키고, offset(immediate)을 이용해서 operand를 구한다.
 

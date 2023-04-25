@@ -52,6 +52,10 @@ Elsevier · 2017년 4월 13일 출시</b>
 
  - [RISC-V Processor](https://github.com/erectbranch/Computer_Organization_and_Design/tree/master/ch04)
 
+   > instruction execution: IF(Instruction Fetch), ID(Instruction Decode/register file read), EX(Execute/address calculation), MEM(Memory access), WB(Write Back)
+
+   > combinational element, state element, sequential elements, multiplexer, control unit(function unit, control line)
+
 <br/>
 
 ## :mag: 목차
