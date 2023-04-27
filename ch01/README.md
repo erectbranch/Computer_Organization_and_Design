@@ -362,7 +362,7 @@ MIPS = #instructions / execution time * 10^6
 
 > 검은 색 선은 Power(전력), 파란 색 선은 Clock Rate(frequency, 클럭 속도)를 의미한다.
 
-> 사실 컴퓨터에서 power(전력)보다 더 중요한 지표는 energy이다. energy 척도인 J(joule)을 단위시간당 energy에 해당되는 W(Watt = joule/sec)보다 더 자주 사용한다.
+> 사실 단위 시간당 에너지를 나타내는 Watt(J/s)보다, 에너지의 총량을 나타내는 Joule(J)를 사용하는 편이 더 나은 척도이다.
 
 위 그림을 보면 30년간 frequency와 power가 함께 빠르게 증가하다가 어느 순간 주춤해진 것을 확인할 수 있다. frequency와 power가 동시에 증가한 이유는 이 둘이 서로 연관이 있기 때문이다.
 
@@ -378,7 +378,7 @@ $$ energy \, \propto \, C \times V^{2}$$
 
 > 위 식은 $0 \rightarrow 1 \rightarrow 0$ 이나 $1 \rightarrow 0 \rightarrow 1$ 처럼 logic이 두 번 바뀔 때 소모하는 energy로, 한 번 바뀔 때는 ${1 \over 2}$ 를 곱해야 한다.
 
-transistor 하나가 소비하는 power는, (한 번 바뀔 때 소모되는 energy) $\times$ (시간당 logic이 바뀌는 frequency)다.
+transistor 하나가 소비하는 power는 (한 번 바뀔 때 소모되는 energy) $\times$ (시간당 logic이 바뀌는 frequency)다.
 
 $$ power \, \propto \, {1 \over 2} \times C \times V^{2} \times Frequency \, switched $$
 
@@ -386,23 +386,25 @@ $$ power \, \propto \, {1 \over 2} \times C \times V^{2} \times Frequency \, swi
 
 - 새 공정기술의 등장으로 voltage는 줄어들었고, voltage는 power의 제곱으로 비례하기 때문에 초기에는 power가 낮아질 수 있었다.
 
-- 하지만 voltage를 낮추면 낮출수록 transistor의 누설(leak) 전류가 생기게 되었고, 현재는 이 누설 전류가 너무 많아지게 되는 문제에 직면했다.
+- 하지만 voltage를 낮추면 낮출수록 transistor의 누설(leak) 전류가 생기게 되었으며, 현재는 이 누설 전류가 너무 많아지게 되었다.(더 늘어나면 transistor 자체를 통제할 수 없게 될 것이다.)
 
-  - 예를 들어 server chip에서는 이미 power의 40%가 누설에 의해 소모되고 있다. 
+  - 예를 들어 server chip에서는 이미 power의 40%가 누설 전류로 소모되고 있다. 
 
   > 꽉 잠기지 않는 수도꼭지에 비유할 수 있다.
   
-이 문제를 **Power Wall**(전력 장벽)이라 한다.
+이 문제를 **Power Wall**(전력 장벽)이라 한다. 
+
+> power wall 문제의 중요도가 잘 와닿지 않는다면, 수 만 개가 넘는 server 환경에서 power를 공급하고 냉각해야 한다는 점을 상기해 보자.(server의 냉각 비용도 전체에서 굉장히 큰 비중을 차지한다.) 또한 power 소모가 줄어들수록 동일한 회로에 더 많은 소자를 집적할 수 있게 된다.
 
 ---
 
 ### 1.6.1 Vdd scaling
 
+더 자세히 이해하기 위해 CMOS(Complementary Metal-Oxide-Semiconductor)를 잠시 들여다 보자.
+
 ![Vth, Vdd gap](images/Vdd_Vth.png)
 
-> Vdd는 굉장히 늘어났는데, Vth는 조금씩 늘어난 추세를 보인다.
-
-Vth와 Vdd의 차이를 비교하면 더 확실하게 이해할 수 있다.
+> (좌측으로) channel length가 작아지면서 Vdd는 굉장히 줄어들었는데, Vth는 조금씩 줄어드는 추세를 보인다.
 
 - high, low 사이의 small margin만 존재
 
@@ -410,7 +412,7 @@ Vth와 Vdd의 차이를 비교하면 더 확실하게 이해할 수 있다.
 
 - high variability or large leakage power
 
-하지만 Vdd를 줄이면 Frequency가 줄어들게 된다. 이러한 문제를 해결할 대안으로 multiprocessor(multicore)가 등장한다.
+게다가 Vdd를 줄이면 frequency도 줄어들게 된다. 이러한 문제를 해결할 대안으로 multiprocessor(multicore)가 등장한다.
 
 ---
 
