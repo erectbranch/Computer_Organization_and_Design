@@ -309,7 +309,7 @@ sd    x5, 96(x22)    # Stores h+A[8] to A[12]
 
 현재 살펴보고 있는 RISC-V architecture는 32개 register밖에 가지고 있지 않다. 그렇다면 instruction을 load할 때, register의 빈 자리가 없는 경우도 생길 것이다.(단순히 overwrite하면 큰 문제가 생길 것이다.)
 
-이러한 문제를 방지하기 위해 **register spilling** 기법을 사용할 수 있다.
+이러한 문제를 방지하기 위해 **register spilling** 기법을 **compiler**가 수행해 준다.
 
 - less frequently used variables를 memory stack에 옮긴다.(`sw`(`sd`)로 stack에 저장)
 
