@@ -77,6 +77,8 @@ Exit: ...
 
 > 순서대로 읽으면 된다. branch if rs1 less than rs2, jump to L1
 
+> MIPS는 대소를 비교하는 branch instruction을 추가로 제공한다. datapath를 조금 더 단순하게 만들 수 있지만 더 많은 instruction을 표현해야 하므로 bit를 추가로 필요로 한다.
+
 - unsigned를 다루는 instruction인 `bltu`, `bgeu`도 있는데, 이를 사용하면 signed도 unsigned처럼 다루게 된다. 
 
 > 이러한 특성 때문에 주로 array index가 array bound를 넘어가는지 check할 때 사용한다.
