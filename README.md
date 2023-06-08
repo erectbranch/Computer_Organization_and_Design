@@ -56,6 +56,14 @@ Elsevier · 2017년 4월 13일 출시</b>
 
    > combinational element, state element, sequential elements, multiplexer, control unit(function unit, control line)
 
+### 🪜 Memory Hierarchy
+
+- [Cache](https://github.com/erectbranch/Computer_Organization_and_Design/tree/master/ch05/summary01)
+
+   > SRAM, DRAM, temporary locality, spatial locality
+
+   > hit ratio, miss ratio, direct mapped cache(tag, valid bit, address subdivision), block size considerations
+
 <br/>
 
 ## :mag: 목차
