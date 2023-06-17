@@ -276,7 +276,7 @@ processor가 item $X_1, \cdots , X_{n-1}, X_{n}$ 가 필요한데, 현재 $X_{n}
 
 ### 5.4.2 address subdivision
 
-이제 memory address가 주어졌을 때, cache에서 data를 찾는 과정을 세분화하여 살펴보자.
+이제 memory address가 주어졌을 때, data가 어느 cache entry에 있는지 찾는 과정을 세분화하여 살펴보자.
 
 > 지금까지의 예시처럼 word 단위의 memory address가 주어진다고 하자.
 
@@ -288,9 +288,9 @@ processor가 item $X_1, \cdots , X_{n-1}, X_{n}$ 가 필요한데, 현재 $X_{n}
 
   - memory alignment에 따라 memory address는 4의 배수로 주어진다. 그리고 memory address의 하위 2bit는 해당 word 내에서 byte 순서를 나타낸다. **따라서 최하위 2bit는 cache에서 사용하지 않는다.**
 
-- word의 32bit에서 $\log_{2}{1024}= 10$ 즉, 하위 10bit를 cache index(byte offset)로 사용한다.
+- word의 32bit에서 $\log_{2}{1024}= 10$ 즉, 하위 10bit를 cache index로 사용한다.
 
-- 나머지 20bit를 그대로 tag로 사용/비교한다.
+- 나머지 20bit를 그대로 tag bits로 사용하며, comparator(비교기)를 사용해 원하는 data가 있는지 확인한다.
 
 위 시스템에서는 memory address에서 상위 20bit가 tag와 같고, valid bit가 1이면 cache hit가 일어난다.
 
