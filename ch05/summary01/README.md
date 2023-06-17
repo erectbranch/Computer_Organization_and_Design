@@ -1,4 +1,4 @@
-# 5 cache
+# 5 cache (Part I)
 
 Amdahl's law에 따라 multiprocessor로 얻을 수 있는 speedup은 제한적이다. 하지만 performance를 더 향상시키기 위한 다른 접근법도 존재한다. 바로 memory system을 더욱 효율적으로 만드는 방식이다.
 
@@ -294,7 +294,17 @@ processor가 item $X_1, \cdots , X_{n-1}, X_{n}$ 가 필요한데, 현재 $X_{n}
 
 위 시스템에서는 memory address에서 상위 20bit가 tag와 같고, valid bit가 1이면 cache hit가 일어난다.
 
-그런데 지금 예시에서는 cache block의 크기를 1word(4bytes)로 들었지만, 일반적으로 여러 words를 저장하는 block을 사용한다. 이 경우 block 내에서 word를 구분하는 역할을 하는 bit를 추가로 사용해야 한다.
+---
+
+### 5.4.3 address subdivision: larger block size
+
+그런데 방금 예시에서는 cache block의 크기가 1word(4bytes)였지만, 일반적으로 cache는 한 block이 multiple words를 저장한다.
+
+![larger block size cache](images/larger_block_size_cache.png)
+
+- block 내 word를 구분하는 역할을 하는 bit가 추가로 필요하다.
+
+- Mux가 추가되며 extra delay가 발생한다. 더 커지는 fetch time과 더불어 block size가 클 때 발생하는 단점이다.
 
 ### <span style='background-color: #393E46; color: #F7F7F7'>&nbsp;&nbsp;&nbsp;📝 예제 2: larger block size&nbsp;&nbsp;&nbsp;</span>
 
@@ -316,40 +326,104 @@ cache의 전체 bit 수를 계산해 보자.
 
 - \#blocks(64개) x {block size(4 words * 32 bits) + tag size(22 bits) + valid bit(1 bit)} = 64 x (128 + 22 + 1) = 9664 bits
 
+> total bits를 구하는 문제에서는 tag bit와 valid bit까지 고려해서 size를 계산했지만, 실제 cache size는 items size만을 취급한다.
+
 ---
 
 ### <span style='background-color: #393E46; color: #F7F7F7'>&nbsp;&nbsp;&nbsp;📝 예제 3: larger block의 cache index 구하기&nbsp;&nbsp;&nbsp;</span>
 
-block size가 16bytes, block 개수가 64개인 cache가 있다고 하자. byte address 1200은 몇 번 block에 mapping되는가?
+다음 조건의 cache가 있다고 하자. 
+
+- block size: 16 bytes
+
+- \#blocks: 64
+
+byte address 1200은 몇 번 block에 mapping되는가?
 
 ### <span style='background-color: #C2B2B2; color: #F7F7F7'>&nbsp;&nbsp;&nbsp;🔍 풀이&nbsp;&nbsp;&nbsp;</span>
 
-block이 16bytes씩 저장하므로 block address는 간단히 구할 수 있다.
+한 block이 16bytes씩 저장하므로, byte address의 block address는 다음과 같은 연산으로 구할 수 있다.
 
 - block address = $\frac{1200}{16} = 75$
 
-block mapping 공식에 따라 75 modulo 64 = 11번 block에 mapping된다.
+- block mapping 공식에 따라 75 modulo 64 = 11번 block에 mapping된다.
+
+> 조건이 byte address인지, word address인지를 명확히 구분해서 연산해야 한다. 
+
+> 예를 들어 만약 문제에서 byte address가 아닌 words address 300가 주어졌다면 $\frac{300}{4} = 75$ 으로 계산해야 한다.
 
 ---
 
 ## 5.5 block size considerations
 
-cache의 block이 커지면 어떤 장단점이 있을까?
+cache의 block이 커지면 어떤 장단점이 있을까? 예를 들어 cache가 data를 16개씩 묶어서 가져온다고 하자. 그러면 processor가 $x_0$ 만 요청했어도, cache는 DRAM에서 $x_1, x_2, ..., x_{15}$ 까지 모두 가져오게 된다.
 
-- block이 크면 spatial locality를 더 잘 활용할 수 있다.
+- 장점
 
-만약 cache가 data를 16개씩 묶어서 가져온다고 하자. 그러면 processor가 $x_0$ 만 요청했어도, cache는 DRAM에서 $x_1, x_2, ..., x_{15}$ 까지 모두 가져오게 된다.
+  - block이 크면 spatial locality를 더 잘 활용할 수 있다.
 
-- 하지만 이에 따라 fetch time가 커지게 되면서, cache miss 때 발생하는 penalty가 증가한다.
+- 단점
 
-> cache에 적재하는 데 드는 시간을 두 요소로 나눌 수 있다. (1) 첫 word를 가져오는 데 드는 latency (2) 나머지 부분을 가져오는 데 드는 전송 시간. 그나마 (2)는 early restart(조기 재시작, block 내 요청한 word가 도착하면 곧바로 실행하는 방식) 방식으로 시간을 줄일 수 있다.
+  - fetch time이 늘어나면서, cache miss 때 발생하는 penalty가 커진다.
 
-따라서 block size가 너무 커지면 그만큼 cache block 개수가 적어지고, 같은 block 위치에 대한 data들의 경쟁이 심해진다. 결과적으로 얼마 사용하지도 못하고 계속 data가 overwrite되는 일이 발생할 수 있다.
+    > fetch time: (1) 첫 word를 가져오는 데 드는 latency (2) 나머지 부분을 가져오는 데 드는 latency 
 
-아래 그림을 보자. 그림은 block size에 따른 miss rate를 나타낸다.
+    > (2)는 **early restart**(조기 재시작, block 내 요청한 word가 도착하면 곧바로 실행하는 방식)를 통해 latency를 줄일 수 있다.
+
+  - block size가 커지면 그만큼 cache block 개수가 적어진다. 따라서 같은 block 위치에 대한 data들의 경쟁이 심해진다. 
+  
+     > 결과적으로 locality를 충분히 활용하지 못하고, 계속 다른 data로 overwrite되는 일이 발생할 수 있다.
+
+아래 그림을 보자. 그림은 cache size와 block size에 따른 miss rate를 나타낸다.
+
+> cache size는 valid bit나 tag field는 제외하고, 오직 저장하는 data의 bits 수만을 고려한다.
 
 ![miss rate with increasing block sizes](images/miss_rate_with_block_size.png)
 
-- cache size에 비해 block size가 너무 크면 오히려 miss rate가 증가한다.
+> 서버급 CPU에서 사용하는 **LLC**(Large-Level Cache)의 경우 M 단위가 넘는 cache size를 갖기도 한다.
+
+- cache size에 비해 상대적으로 block size가 너무 크면 miss rate가 커진다.
+
+  > cache size 4K에서는 block size가 64가 넘는 구간부터 overshoot가 발생했다.
+
+cache에서 block size는 width, \#blocks는 height로 생각하자. 
+
+- width가 256이며 height가 16일 때 256 x 16 = $2^8$ x $2^4$ = $2^{12}$ = 4K가 된다.
+
+- 반대로 4K cache size에서는 \#blocks(cache lines)가 겨우 16개밖에 없다는 것을 알 수 있다.
+
+이처럼 <U>block size를 늘리면 spatial locality는 커지지만</U>, <U>blocks 수가 적어지면서 temporal locality는 줄어드는</U> **trade-off**가 있다.
+
+### <span style='background-color: #393E46; color: #F7F7F7'>&nbsp;&nbsp;&nbsp;📝 예제 4: larger block의 cache index 구하기&nbsp;&nbsp;&nbsp;</span>
+
+다음과 같은 cache size, block size를 갖는 cache에서 (1) block 수와 (2) 전체 bit 수를 구하여라.
+
+- cache size 32KB
+
+- 1 block(=cache line) = 16 words
+
+### <span style='background-color: #C2B2B2; color: #F7F7F7'>&nbsp;&nbsp;&nbsp;🔍 풀이&nbsp;&nbsp;&nbsp;</span>
+
+우선 16 words는 16 x 4 bytes = 64 bytes이다. 이를 바탕으로 cache가 얼만큼 \#blocks를 갖는지 계산해 보자.
+
+32KB / 64B = $2^9$ = 512 \#blocks
+
+32 bits address는 다음과 같이 구분된다.
+
+- byte offset: 2 bits
+
+- word offset: 1 cache line이 16( $=2^4$ ) words를 저장하므로 4 bits
+
+- index: \#blocks 512( $=2^9$ ) 이므로 9 bits
+
+- tag: 32 - (2 + 4 + 9) = 17 bits
+
+- valid bit: 1bit
+
+따라서 cache에서 쓰는 전체 bits 수는 다음과 같다.
+
+- \#blocks x (block size(data) + tag size + valid bit)
+
+  - 512 * (64*8 + 17 + 1) bits = 271,360 bits
 
 ---
