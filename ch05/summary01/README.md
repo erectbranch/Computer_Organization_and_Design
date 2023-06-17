@@ -394,9 +394,9 @@ cache에서 block size는 width, \#blocks는 height로 생각하자.
 
 이처럼 <U>block size를 늘리면 spatial locality는 커지지만</U>, <U>blocks 수가 적어지면서 temporal locality는 줄어드는</U> **trade-off**가 있다.
 
-### <span style='background-color: #393E46; color: #F7F7F7'>&nbsp;&nbsp;&nbsp;📝 예제 4: larger block의 cache index 구하기&nbsp;&nbsp;&nbsp;</span>
+### <span style='background-color: #393E46; color: #F7F7F7'>&nbsp;&nbsp;&nbsp;📝 예제 4: cache block 수, 전체 bits 수 구하기&nbsp;&nbsp;&nbsp;</span>
 
-다음과 같은 cache size, block size를 갖는 cache에서 (1) block 수와 (2) 전체 bit 수를 구하여라.
+다음과 같은 cache size, block size를 갖는 cache에서 (1) block 수, (2) 전체 bit 수를 구하여라.
 
 - cache size 32KB
 
