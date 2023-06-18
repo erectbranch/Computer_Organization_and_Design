@@ -50,19 +50,35 @@ Elsevier · 2017년 4월 13일 출시</b>
 
    > data race, synchronization, atomic swap, mutex lock
 
- - [RISC-V Processor](https://github.com/erectbranch/Computer_Organization_and_Design/tree/master/ch04)
+### 🎛 RISC-V Processor
+
+ - [RISC-V Processor datapath](https://github.com/erectbranch/Computer_Organization_and_Design/tree/master/ch04/summary01)
 
    > instruction execution: IF(Instruction Fetch), ID(Instruction Decode/register file read), EX(Execute/address calculation), MEM(Memory access), WB(Write Back)
 
    > combinational element, state element, sequential elements, multiplexer, control unit(function unit, control line)
 
-### 🪜 Memory Hierarchy
+ - [RISC-V Pipelining](https://github.com/erectbranch/Computer_Organization_and_Design/tree/master/ch04/summary02)
 
-- [Cache](https://github.com/erectbranch/Computer_Organization_and_Design/tree/master/ch05/summary01)
+   > single-cycle vs pipelined performance, pipeline bubble, steady state
+
+   > pipeline hazard: structural hazard, data hazard(forwarding, code scheduling), control hazard(static/dynamic branch prediction)
+
+### 🪜 Cache
+
+- [memory hierarchy, direct mapped cache](https://github.com/erectbranch/Computer_Organization_and_Design/tree/master/ch05/summary01)
 
    > SRAM, DRAM, temporary locality, spatial locality
 
    > hit ratio, miss ratio, direct mapped cache(tag, valid bit, address subdivision), block size considerations
+
+- [cache miss, cache write, set-associative cache](https://github.com/erectbranch/Computer_Organization_and_Design/tree/master/ch05/summary02)
+
+   > cache miss(compulsory/capacity/conflict misses), cache write(write-through, write buffer, write-back, write allocation)
+
+   > N-way set-associative cache(miss rate and associativity), fully-associative cache, replacement policy(LRU, random)
+
+   > split cache(instruction cache, data cache), cache performance(memory-stall clock cycles, AMAT), multilevel caches(primary cache, secondary cache)
 
 <br/>
 
