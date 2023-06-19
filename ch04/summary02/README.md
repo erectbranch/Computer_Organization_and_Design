@@ -33,7 +33,7 @@ instruction이 수행되는 five stages을 복습하면 다음과 같다.
 
 ### 4.10.1 single-cycle performance
 
-우선 pipeline을 적용하지 않은 단일 사이클 구현을 보자.
+우선 pipeline을 적용하지 않은 단일 사이클 구현을 보자.(**nonpipelined**)
 
 - **모든 instruction 수행되는 시간 = 한 clock cycle**
 
@@ -41,17 +41,21 @@ instruction이 수행되는 five stages을 복습하면 다음과 같다.
 
 만약 4번째 instruction이 시작하기 전까지 걸린 total time이라면 단순히 800 \* 3 = 2400ps가 된다.
 
+요약하자면 단순히 CPI만을 봤을 때는 CPI = 1이지만, single-cycle path에서는 clock cycle이 가장 긴 instruction(거의 확실하게 store instruction)에 의해 결정되므로 비효율적이다.
+
 ---
 
 ### 4.10.2 pipelined performance
 
-반면 pipeline된 구현의 경우 clock cycle은, stage에 따라 clock cycle의 길이가 결정된다.
+**pipelining**(파이프라이닝)이란 여러 instruction을 동시에 중첩되어 수행하는 구현 기술이다. 
 
-- **각 pipeline stage가 수행되는 시간 = 한 clock cycle**
+single-cycle(단일 사이클)에서 pipeline 방식의 clock cycle의 길이는 pipeline stage 하나를 수행하는 시간에 따라 결정된다.
 
-  - 따라서 한 clock cycle = 가장 오랜 시간이 걸리는 stage의 수행 시간(예: 200ps)이 된다.
+- **pipeline stage 하나가 수행되는 시간 = 한 clock cycle**
 
-만약 worst-case가 별도로 존재하지 않고 모든 stage가 완벽히 균형이 맞춰져 있다고 가정하면, pipelined processor에서의 instruction 수행 시간은 다음과 같이 계산할 수 있다.
+  - 따라서 한 clock cycle = 가장 오랜 시간이 걸리는 stage의 수행 시간(예: 200ps)에 의해 결정된다.
+
+만약 worst-case가 별도로 존재하지 않고 모든 stage가 완벽히 균형이 맞춰져 있다고 가정하면, pipelined processor에서의 instruction 수행 시간은 다음과 같이 계산된다.
 
 $$ T_{p} = {{T_{n}} \over {n}} $$
 
@@ -61,7 +65,7 @@ $$ T_{p} = {{T_{n}} \over {n}} $$
 
 - $n$: pipeline stage의 개수
 
-즉, 이상적인 가정 하에서는 pipeline stage가 많으면 많을수록 instruction 수행 시간이 더 짧아지게 된다. 예를 들어 5개의 pipeline stage가 있다면, pipelined processor에서의 한 instruction은 800ps / 5 = 160ps만에 수행될 수 있다.
+즉, 이상적인 가정 하에서는 pipeline stage가 많으면 많을수록, instruction 수행 시간이 더 짧아지게 된다. 예를 들어 5개의 pipeline stage가 있다면, pipelined processor에서의 한 instruction은 800ps / 5 = 160ps만에 수행될 수 있다.
 
 ### <span style='background-color: #393E46; color: #F7F7F7'>&nbsp;&nbsp;&nbsp;📝 예제 1: single-cycle vs pipelined &nbsp;&nbsp;&nbsp;</span>
 
@@ -95,7 +99,7 @@ speedup을 계산하면 800,002,400/200,001,400으로 약 4.00을 얻을 수 있
 
 ## 4.11 RISC-V instruction sets for pipelining
 
-RISC-V는 처음부터 pipeline을 고려하며 설계되었다.
+RISC-V는 처음부터 pipelining을 고려하며 설계되었다.
 
 1. RISC-V instruction은 모두 **32bit** 길이를 갖는다.
 
@@ -200,19 +204,7 @@ sub  x2, "x19", x3    # x19를 read   (WAR dependence)
 
 ---
 
-#### 4.13.2.1 forwarding
-
-그렇다면 위와 같은 forwarding은 실제 datapath에서 어떻게 구현된 것일까?
-
-- 앞선 예시라면 `add` instruction의 ALU 연산 결과를, 바로 `sub` instruction의 operand로 사용할 수 있게 구현해야 한다.
-
-이전까지 보던 datapath에 forwarding을 추가한 datapath 그림을 한번 살펴보자.(4.14절에서 더 자세히 살펴볼 것이다.)
-
-![data path](images/pipeline_data_path.png)
-
-- ALU output: 연산 값이 pipeline register(EX/MEM)에 기록된다.
-
-- ALU input: register source, sign-extended immediate, ALU output 중 택 1
+#### 4.13.2.1 load-use data hazard
 
 하지만 언제나 forwarding으로 모든 pipeline bubble을 피할 수 있는 것은 아니다. 예를 들어서 아래와 같이 load instruction 바로 다음으로 값을 읽는 instruction이 있을 수 있다.(**load-use data hazard**)
 
