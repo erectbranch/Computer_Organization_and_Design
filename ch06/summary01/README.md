@@ -230,7 +230,7 @@ Speedup = 90 = {{1} \over {(1 - F_{parallelizable}) + {F_{parallelizable}/100}}}
 
 > Intel에서 **Hyper-threading**이라고 불리는 기술이다. SMT와 비교하여 TMT를 fake multi-threading으로 부르기도 한다.
 
-- function unit(issue slot)만 avaliable하면, 다른 thread instruction을 동시에 수행한다.
+- function unit(issue slot)만 available하면, 다른 thread instruction을 동시에 수행한다.
 
 - 여러 thread들이 동시에 동작하기 때문에 hardware resource가 더 필요하다.
 
