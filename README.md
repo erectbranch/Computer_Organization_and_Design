@@ -80,6 +80,18 @@ Elsevier · 2017년 4월 13일 출시</b>
 
    > split cache(instruction cache, data cache), cache performance(memory-stall clock cycles, AMAT), multilevel caches(primary cache, secondary cache)
 
+### ⛓ Parallel Processors
+
+- [interconnect, heterogeneity, thread](https://github.com/erectbranch/Computer_Organization_and_Design/tree/master/ch06/summary01)
+
+   > interconnection, I/O register mapping(memory mapped I/O, I/O mapped I/O), polling, interrupt
+
+   > heterogeneous computing, parallel programming, process vs thread, Thread-Level Parallelism(TLP): Temporal Multi-Threading(Coarse-grained, Fine-grained), Simultaneous Multi-Threading(SMT)
+
+   > Shared Memory Multiprocessor(SMP), Uniform Memory Access, Non-Uniform Memory Access, PThread Programming
+
+   > Message Passing Interface(MPI), MPI programming 
+
 <br/>
 
 ## :mag: 목차
