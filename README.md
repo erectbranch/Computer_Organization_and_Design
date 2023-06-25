@@ -64,6 +64,12 @@ Elsevier · 2017년 4월 13일 출시</b>
 
    > pipeline hazard: structural hazard, data hazard(forwarding, code scheduling), control hazard(static/dynamic branch prediction)
 
+ - [RISC-V Pipelined datapath, ILP](https://github.com/erectbranch/Computer_Organization_and_Design/tree/master/ch04/summary03)
+
+   > pipeline register, forwarding, double data hazard
+   
+   > Instruction Level Parallelism, Multiple Issue, Speculation, VLIW(Very Long Instruction Word), Loop Unrolling
+
 ### 🪜 Cache
 
 - [memory hierarchy, direct mapped cache](https://github.com/erectbranch/Computer_Organization_and_Design/tree/master/ch05/summary01)
